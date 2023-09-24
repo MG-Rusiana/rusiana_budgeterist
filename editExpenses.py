@@ -55,14 +55,13 @@ bgf.place(x=0,y=0)
 
 def edit():
     cursor.execute(f"UPDATE expenses SET expenses = '{EXPENSES.get()}', amount = '{AMOUNT.get()}' WHERE id = {ID.get()}")
-    print("added data")
     cnx.commit()
-    print(EXPENSES.get())
-    print(AMOUNT.get())
-    print(ID.get())
     root.destroy()
     os.system('py dashboard.py')   
 
+def cancel():
+    root.withdraw()
+    os.system('py dashboard.py')
 
 # Inputs
 expenses = Entry(root, textvariable=EXPENSES,font=("Tibetan Machine Uni", 21),fg="#292626",bg="#FFF4F4",width=29,bd=0)
@@ -71,10 +70,16 @@ amount = Entry(root, textvariable=AMOUNT,font=("Tibetan Machine Uni", 21),fg="#2
 amount.place(x=100, y=310)
 
 
+# Cancel Button
+cancelbtn =   PhotoImage(file='img/cancel.png')
+cancelbtnf = Button(root,image=cancelbtn,bd=0, bg="#292626", command=cancel, activebackground="#292626")
+cancelbtnf.place(x=135,y=400)
+
+
 # Update button
 editbtn =   PhotoImage(file='img/updateBtn.png')
 editbtnf = Button(root,image=editbtn,bd=0, bg="#292626", command=edit, activebackground="#292626")
-editbtnf.place(x=250,y=400)
+editbtnf.place(x=370,y=400)
 
 
 root.mainloop() 

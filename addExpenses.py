@@ -1,6 +1,7 @@
 from tkinter import *
 import mysql.connector
 import os
+from tkinter import messagebox
 
 
 
@@ -43,12 +44,21 @@ bgf = Label(root,image=bg ,bg="#292626")
 bgf.place(x=0,y=0)
 
 
-def add():
-    cursor.execute(f"INSERT INTO expenses (expenses, amount) VALUES ('{EXPENSES.get()}', {AMOUNT.get()});")
-    cnx.commit()
-    root.destroy()
-    os.system('py dashboard.py')
+# functions
 
+def add():
+    if EXPENSES.get() == "" or AMOUNT.get() == 0:
+        messagebox.showwarning("INCOMPLETE FIELDS!", "Please complete the missing fields!")
+    else:          
+        cursor.execute(f"INSERT INTO expenses (expenses, amount) VALUES ('{EXPENSES.get()}', {AMOUNT.get()});")
+        cnx.commit()
+        root.destroy()
+        os.system('py dashboard.py')
+      
+
+def cancel():
+    root.withdraw()
+    os.system('py dashboard.py')
 
 # inputs
 expenses = Entry(root, textvariable=EXPENSES,font=("Tibetan Machine Uni", 21),fg="#292626",bg="#FFF4F4",width=29,bd=0)
@@ -57,10 +67,15 @@ amount = Entry(root, textvariable=AMOUNT,font=("Tibetan Machine Uni", 21),fg="#2
 amount.place(x=100, y=310)
 
 
-# Get started button
+# Cancel Button
+cancelbtn =   PhotoImage(file='img/cancel.png')
+cancelbtnf = Button(root,image=cancelbtn,bd=0, bg="#292626", command=cancel, activebackground="#292626")
+cancelbtnf.place(x=135,y=400)
+
+# Add button
 addbtn =   PhotoImage(file='img/addBtn.png')
 addbtnf = Button(root,image=addbtn,bd=0, bg="#292626", command=add, activebackground="#292626")
-addbtnf.place(x=250,y=400)
+addbtnf.place(x=370,y=400)
 
 
 root.mainloop() 

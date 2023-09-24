@@ -2,6 +2,7 @@ from tkinter import *
 import mysql.connector
 import os
 import json
+from tkinter import messagebox
 
 
 
@@ -57,13 +58,19 @@ def edit(id, expenses, amount):
 
 # deleting expenses
 def delete(id):
-    cursor.execute(f"DELETE FROM expenses WHERE id = {id};")
-    cnx.commit()
-    print("ITEM ", id, " is deleted")
-    for widget in expF.winfo_children():
-        widget.destroy()
-        totalAmount()
-    display()
+    result = messagebox.askquestion("Confirmation", "Do you want to delete this item?")
+    if result == "yes":
+        cursor.execute(f"DELETE FROM expenses WHERE id = {id};")
+        cnx.commit()
+        print("ITEM ", id, " is deleted")
+        for widget in expF.winfo_children():
+            widget.destroy()
+            totalAmount()
+        display()
+        print("Action confirmed.")
+    else:
+        print("Action canceled.")
+
     
 
 # Background
@@ -147,8 +154,11 @@ expF.grid(column=1, row=7)
 card = PhotoImage(file='img/addExp.png')
 deletebtn = PhotoImage(file='img/delete.png')
 editbtn = PhotoImage(file='img/edit.png')
+
 def display():
+
     cursor.execute("SELECT * FROM expenses;")
+    
     i = 0
     for data in cursor:
 
