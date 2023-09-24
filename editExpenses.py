@@ -1,5 +1,6 @@
 from tkinter import *
 import mysql.connector
+import json
 import os
 
 
@@ -31,36 +32,49 @@ cursor.execute("USE budgeterist")
 cursor.execute("CREATE TABLE IF NOT EXISTS expenses  ( id INT AUTO_INCREMENT PRIMARY KEY, expenses VARCHAR(255), amount INT);")
 
 
+# json
+with open('data.json', 'r') as f:
+    data = json.load(f)
+
+
 # Variables
+ID = IntVar()
 EXPENSES = StringVar()
 AMOUNT = IntVar()
 
+ID.set(data['id'])
+EXPENSES.set(data['expenses'])
+AMOUNT.set(data['amount'])
 
 
 # Background
-bg = PhotoImage(file='img/addWin.png')
+bg = PhotoImage(file='img/editWin.png')
 bgf = Label(root,image=bg ,bg="#292626")
 bgf.place(x=0,y=0)
 
 
-def add():
-    cursor.execute(f"INSERT INTO expenses (expenses, amount) VALUES ('{EXPENSES.get()}', {AMOUNT.get()});")
+def edit():
+    cursor.execute(f"UPDATE expenses SET expenses = '{EXPENSES.get()}', amount = '{AMOUNT.get()}' WHERE id = {ID.get()}")
+    print("added data")
     cnx.commit()
+    print(EXPENSES.get())
+    print(AMOUNT.get())
+    print(ID.get())
     root.destroy()
-    os.system('py dashboard.py')
+    os.system('py dashboard.py')   
 
 
-# inputs
+# Inputs
 expenses = Entry(root, textvariable=EXPENSES,font=("Tibetan Machine Uni", 21),fg="#292626",bg="#FFF4F4",width=29,bd=0)
 expenses.place(x=100, y=180)
 amount = Entry(root, textvariable=AMOUNT,font=("Tibetan Machine Uni", 21),fg="#292626",bg="#FFF4F4",width=29,bd=0)
 amount.place(x=100, y=310)
 
 
-# Get started button
-addbtn =   PhotoImage(file='img/addBtn.png')
-addbtnf = Button(root,image=addbtn,bd=0, bg="#292626", command=add, activebackground="#292626")
-addbtnf.place(x=250,y=400)
+# Update button
+editbtn =   PhotoImage(file='img/updateBtn.png')
+editbtnf = Button(root,image=editbtn,bd=0, bg="#292626", command=edit, activebackground="#292626")
+editbtnf.place(x=250,y=400)
 
 
 root.mainloop() 

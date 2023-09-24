@@ -36,7 +36,7 @@ bgf.place(x=0,y=0)
 
 # Get started button
 btn =   PhotoImage(file='img/Get Started.png')
-btnf = Button(root,image=btn,bd=0, bg="#292626", command=getStarted)
+btnf = Button(root,image=btn,bd=0, bg="#292626", command=getStarted, activebackground="#292626")
 btnf.place(x=600,y=600)
 
 
